@@ -33,7 +33,9 @@ h1, h2, h3, h4, h5{
 }
 
 h1{
-	height: 50px;
+	height: auto;
+	margin-right: 10px;
+	margin-left: 10px;
 }
 #name-search{
 	position: absolute;
@@ -47,4 +49,9 @@ h1{
 	left: 35%;
 	width: 20%;
 	top: 5%;
+}
+
+.link-icon{
+	height: 24px;
+	width: 24px;
 }
