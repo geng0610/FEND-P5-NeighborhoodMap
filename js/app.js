@@ -84,7 +84,7 @@ var modelViewController={
         mapView.initMap(model.locations)
         setTimeout(function(){ // wait for ajaxcall to populate the rest of the model
             mapView.initSideBar(model.locations);
-        },500);
+        },750);
     },
 
     //Clicking on a location name, location address, or location marker will zoom the map to that location.
