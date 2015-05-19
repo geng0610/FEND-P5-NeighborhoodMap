@@ -33,11 +33,7 @@ var model = {
                 singleLocation.venueLng=swarmExport.response.checkins.items[item].venue.location.lng;
                 singleLocation.venueRating="Not yet rated.";
                 singleLocation.venueCategory="A category of its own";
-                /*$.getJSON('https://api.foursquare.com/v2/venues/53ff6394498eebee81f7b6f3?client_id=TU0ODIPVH3EANT0JA5KYHWH0HUNXQB5PGJ4JKUL3ZCTQZHC4&client_secret=KZHUSP0CU2QUB3LYTABAAZJGFP3GBHM05NV1ILF2E31ODKQX&v=20150513',
-                    {},function(data){
-                        console.log(data['response']['venue']['rating']);
-                        singleLocation.venueRating=data['response']['venue']['rating'];
-                    })*/
+                singleLocation.venuePhotos="";
                 model.locations.push(singleLocation);
             }
         };
@@ -62,7 +58,7 @@ var model = {
                         if (model.locations[j].id==data['response']['venue']['id']){
                             model.locations[j].venueRating=data['response']['venue']['rating'];
                             model.locations[j].venueCategory=data.response.venue.categories[0].name;
-                            model.locations[j].venuePhotos=data.response.venue.photos.groups.items;
+                            model.locations[j].venuePhotos=data.response.venue.photos.groups[0].items;
                             //console.log(model.locations[j].venuePhotos);
                             if(model.locations[j].venueRating){
                                 $('#'+model.locations[j].id).children(".location-rating-and-link").children(".location-rating").text(model.locations[j].venueRating+"/10");
@@ -94,27 +90,29 @@ var model = {
 var modelViewController={
     init: function(locations){
         model.init();
-        mapView.init(model.locations);
         mapView.initSideBar(model.locations);
         model.getRatings();
+        mapView.init(model.locations);
     },
     setCurrentLocation: function(location_id){
         model.previousSelectedLocation = model.selectedLocation;
         if(model.previousSelectedLocation){
-            model.selectedLocation = model.selectLocationById(location_id);
-            mapView.zoomToLocation(model.selectedLocation);
             mapView.unfocusOnMarker(model.previousSelectedLocation);
-            mapView.focusOnMarker(model.selectedLocation);
-            console.log(model.previousSelectedLocation, model.selectedLocation);
-        } else{
-            model.selectedLocation=model.selectLocationById(location_id)
-            mapView.zoomToLocation(model.selectedLocation);
-            mapView.focusOnMarker(model.selectedLocation);
+            mapView.closeInfoWindow();
         }
+        model.selectedLocation = model.selectLocationById(location_id);
+        mapView.zoomToLocation(model.selectedLocation);
+        mapView.focusOnMarker(model.selectedLocation);
+            //console.log(model.previousSelectedLocation, model.selectedLocation);
+    },
+    expandCurrentLocation: function(location_id){
+        model.previousSelectedLocation = model.selectedLocation;
+        mapView.initInfoWindow(model.selectedLocation);        
     },
     searchByName:function(query){
-        console.log("search by name called", query)
+        //console.log("search by name called", query)
         if (query.length>0){
+            modelViewController.reset();
             var filteredLocations = [];
             for (var i in model.locations){
                 if (model.locations[i].venueName.toLowerCase().search(query.toLowerCase())>=0||model.locations[i].venueFormattedAddress.toString().toLowerCase().search(query.toLowerCase())>=0||model.locations[i].venueCategory.toLowerCase().search(query.toLowerCase())>=0){
@@ -127,6 +125,12 @@ var modelViewController={
     },
     reset: function(){
         mapView.showSelectLocations(model.locations);
+        if (model.selectedLocation){
+            mapView.unfocusOnMarker(model.selectedLocation);
+        }
+        mapView.closeInfoWindow();
+        model.selectedLocation = null;
+        model.previousSelectedLocation = null;
     }
 }
 
@@ -137,7 +141,7 @@ var modelViewController={
 var mapView = {
     map: new google.maps.Map(document.getElementById('map-canvas')),
     markers:[],
-    setMapCenterAndZoom: function(locations){
+    setMapCenterAndBound: function(locations){
         var midpoint = {};
         var lat_min = locations[0].venueLat;
         var lat_max = locations[0].venueLat;
@@ -155,29 +159,17 @@ var mapView = {
         }
         midpoint.lat = (lat_max+lat_min)/2;
         midpoint.lng = (lng_max+lng_min)/2;
-        var GLOBE_WIDTH = 256
-        var lng_angle = lng_max - lng_min ;
-        if (lng_angle < 0) {
-          lng_angle += 360;
-        }   
-        var lat_angle = lat_max - lat_min ;
-        if (lat_angle < 0) {
-          lat_angle += 360;
-        }
-        function calculateZoom(){
-            return Math.min(Math.round(Math.log($('#map-canvas').innerWidth()*180 / lng_angle / GLOBE_WIDTH))+1, Math.round(Math.log($('#map-canvas').innerHeight()*180 / lat_angle / GLOBE_WIDTH))+1);
-        }
-        var zoomLevel = calculateZoom();
+        var ne = new google.maps.LatLng(lat_max,lng_max);
+        var sw = new google.maps.LatLng(lat_min,lng_min);
         var center=new google.maps.LatLng(midpoint.lat,midpoint.lng);
-        var mapOptions = {
-          center: center,
-          zoom: zoomLevel
-        };
-        //var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
-        mapView.map.setOptions(mapOptions);
+        mapView.map.setCenter(center);
+        var bounds = new google.maps.LatLngBounds();
+        bounds.extend(ne);
+        bounds.extend(sw);
+        mapView.map.fitBounds(bounds);
     },
     init: function(locations){
-        mapView.setMapCenterAndZoom(locations);
+        mapView.setMapCenterAndBound(locations);
         for (var i in locations){
             var myLat = locations[i].venueLat;
             var myLng = locations[i].venueLng;
@@ -187,6 +179,10 @@ var mapView = {
                 map:mapView.map,
                 id:locations[i].id
             });
+            google.maps.event.addListener(marker, 'click', function(){
+                modelViewController.setCurrentLocation(this.id);
+                modelViewController.expandCurrentLocation(this.id);
+            })
             mapView.markers.push(marker);
         }
         google.maps.event.addDomListener(window, "resize", function() {
@@ -196,16 +192,113 @@ var mapView = {
             //mapView.map.setZoom(calculateZoom());
         });
     },
-    initLocation: function(single_location){
+    infowindow : new google.maps.InfoWindow(), 
+    initInfoWindow: function (single_location){
+
+        var infoWindowContainer = document.createElement("div");
+        infoWindowContainer.id = "container-"+single_location.id;
+        infoWindowContainer.classList.add("info-container");
+
+        var locationName = document.createElement("h2");
+        locationName.classList.add("info-location-name");
+        locationName.innerHTML = single_location.venueName;
+        infoWindowContainer.appendChild(locationName);
+
+        var locationCategory = document.createElement("h3");
+        locationCategory.classList.add("location-category");
+        locationCategory.innerHTML = single_location.venueCategory;
+        infoWindowContainer.appendChild(locationCategory);
+
+        var locationRatingAndLink = document.createElement("div");
+        locationRatingAndLink.classList.add("location-rating-and-link");
+        infoWindowContainer.appendChild(locationRatingAndLink);
+
+        var locationRating = document.createElement("span");
+        locationRating.classList.add("location-rating");
+        if (single_location.venueRating){
+            locationRating.innerHTML = single_location.venueRating+"/10";
+            if(single_location.venueRating>8){
+                locationRating.style.color = "green";
+            } if (single_location.venueRating>7) {
+                locationRating.style.color = "#FFC107";
+            } else{
+                locationRating.style.color = "red";
+            }
+        } else (
+            locationRating.innerHTML = "Not yet rated."
+        )
+
+        locationRatingAndLink.appendChild(locationRating);
+
+        var locationLink = document.createElement("a");
+        locationLink.classList.add("location-link");
+        locationLink.href = single_location.venueUrl;
+        locationRatingAndLink.appendChild(locationLink);
+
+        var locationLinkLogo = document.createElement("img");
+        locationLinkLogo.classList.add("link-icon");
+        locationLinkLogo.src = "images/link-icon.png";
+        locationLink.appendChild(locationLinkLogo);
+
+        var locationAddress = document.createElement("p");
+        locationAddress.classList.add("info-location-address");
+        var tempAddressText = "";
+        for (var i in single_location.venueFormattedAddress) {
+            if (i<single_location.venueFormattedAddress.length-1){
+                tempAddressText = tempAddressText+single_location.venueFormattedAddress[i]+"<BR>";
+            } else {
+                tempAddressText = tempAddressText+single_location.venueFormattedAddress[i];
+            }
+        }
+        locationAddress.innerHTML = tempAddressText;
+        infoWindowContainer.appendChild(locationAddress);
+
+        var locationPictures = document.createElement("div");
+        locationPictures.classList.add("location-pictures");
+        infoWindowContainer.appendChild(locationPictures);
+
+        for (var i in single_location.venuePhotos){
+            var locationPicture = document.createElement("img");
+            locationPicture.classList.add("location-picture");
+            locationPicture.src = single_location.venuePhotos[i].prefix+"200x200"+single_location.venuePhotos[i].suffix;
+            locationPictures.appendChild(locationPicture);
+        }
+
+
+        mapView.infowindow.setContent(infoWindowContainer);
+        //infowindow.setContent(single_location.id);
+        var marker;
+        for (var i in mapView.markers){
+            if (mapView.markers[i].id == single_location.id){
+                marker = mapView.markers[i];
+            }
+        }
+        mapView.infowindow.open(marker.getMap(), marker);
+    },
+    closeInfoWindow : function(){
+        mapView.infowindow.close();
+    },
+    initLocation: function(single_location, counter){
         //console.log("creating a location element")
         var locationContainer = document.createElement("div");
         locationContainer.id=single_location.id
         locationContainer.classList.add("location-profile");
+        var styleCounter = counter%4
+        if( styleCounter == 0 ){
+            locationContainer.style.borderBottom = "3px solid #3F51B5";
+        } if( styleCounter == 1 ){
+            locationContainer.style.borderBottom = "3px solid #F44336";
+        } if( styleCounter == 2 ){
+            locationContainer.style.borderBottom = "3px solid #FFC107";
+        } if( styleCounter == 3 ){
+            locationContainer.style.borderBottom = "3px solid green";
+        }
 
+        var locationNameButton = document.createElement("button");
         var locationName = document.createElement("h2");
         locationName.classList.add("location-name");
         locationName.innerHTML = single_location.venueName;
-        locationName.addEventListener("click",function(){modelViewController.setCurrentLocation(single_location.id);});//modelViewController.setCurrentLocation(single_location.id));
+        locationName.addEventListener("click",function(){modelViewController.setCurrentLocation(single_location.id);modelViewController.expandCurrentLocation(single_location.id);});//modelViewController.setCurrentLocation(single_location.id));
         locationContainer.appendChild(locationName);
 
         var locationCategory = document.createElement("h3");
@@ -251,8 +344,9 @@ var mapView = {
 
     initSideBar: function (locations){
         var tempLocations = document.createDocumentFragment();
+        tempLocations.id = "tempLocation";
         for (var i in locations) {
-            tempLocations.appendChild(mapView.initLocation(locations[i]));
+            tempLocations.appendChild(mapView.initLocation(locations[i], i));
         }
         document.querySelector("#side-bar-body").appendChild(tempLocations);
     },
@@ -294,7 +388,7 @@ var mapView = {
 
     showSelectLocations: function(selectedLocations){
         mapView.cleanMap();
-        mapView.setMapCenterAndZoom(selectedLocations);
+        mapView.setMapCenterAndBound(selectedLocations);
         for (var i in selectedLocations){
             $("#"+selectedLocations[i].id).show();
             for (var j in mapView.markers){
@@ -304,10 +398,9 @@ var mapView = {
                 }
             }
         }
-    }
+    },
 }
 
-//google.maps.event.addDomListener(window, 'load', mapView.init(locations));
 document.addEventListener('DOMContentLoaded', function() {
   modelViewController.init();
   $('#name-search').submit(function(event){
@@ -316,4 +409,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   $('#reset-button').click(function(){modelViewController.reset()})//$('#name-search').submit(function(event){modelViewController.searchByName($('#name-search input').val()); event.preventDefault();});
 });
-//google.maps.event.addDomListener(window, 'load', getRatings());

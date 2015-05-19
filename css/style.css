@@ -58,6 +58,11 @@ h1, h2, h3, h4, h5{
 
 .location-name{
 	font-size: 18px;
+	cursor: hand;
+}
+
+.location-name:hover{
+	color: #3F51B5;
 }
 
 .location-category{
@@ -86,4 +91,37 @@ h1, h2, h3, h4, h5{
 	font-size: 14px;
 	margin-top: 0px;
 	margin-bottom: 0px;
+	cursor: hand;
+}
+
+.location-address:hover{
+	color: #212121;
+}
+
+.info-container{
+	max-height: 325px;
+	max-width: 350px;
+}
+
+.info-location-name{
+	font-size: 18px;
+}
+
+.info-location-address{
+	font-size: 14px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.location-pictures{
+	overflow-x: scroll;
+	overflow-y: hidden;
+	white-space: nowrap;
+	background-color: #F5F5F5;
+}
+.location-picture{
+	display: inline-block;
+	margin-right: 20px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
