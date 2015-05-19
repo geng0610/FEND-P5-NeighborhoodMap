@@ -117,11 +117,13 @@ h1, h2, h3, h4, h5{
 	overflow-x: scroll;
 	overflow-y: hidden;
 	white-space: nowrap;
-	background-color: #F5F5F5;
+	background-color: #EEEEEE;
 }
 .location-picture{
 	display: inline-block;
-	margin-right: 20px;
+	margin-left: 10px;
+	margin-left: 10px;
 	margin-top: 5px;
 	margin-bottom: 5px;
+	box-shadow: 0px 2px 2px #212121;
 }
