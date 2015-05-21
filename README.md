@@ -5,6 +5,9 @@ This app looks at my recent swarm check-ins.
 A JSON model from swarm was downloaded before the app is initialized. User's history can only be accessed post server-side authentication, so this simulate the authentication process.
 We use the raw JSON file to initiate our own model.
 
+To Start.
+- Open Index.html. Enjoy!
+
 The app does 4 things.
 1. Display all recent locations where I checked-in.
 2. Allow user to search locations based on name, category, and address.

@@ -1,0 +1,43 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Neighborhood Map</title>
+  <meta name="description" content="Neighborhood Map Project from Udacity's JavaScript Design Patterns Class">
+  <meta name="author" content="Geng">
+  <script src="js/jquery-1.11.3.min.js"></script>
+  <script src="js/knockout-3.3.0.min.js"></script>
+  <link href="css/style.css" rel="stylesheet">
+  <script src="offline/offline.min.js"></script>
+  <link href="offline/themes/offline-theme-slide.css" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJ7pkIrHpEuDHJkcXbv46Tmvj6C49jZ24"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+  </head>
+  <body>
+    <div id = "main">
+      <div id="map-canvas" ></div>
+      <div id="side-bar">
+        <h1 id="side-bar-title">Recent check-ins</h1>
+        <!--<img id="loading-wheel" src="images/loading-wheel.gif">-->
+        <div id="side-bar-body" data-bind="foreach: filteredVenues">
+          <div id="53ff6394498eebee81f7b6f3" class="location-profile">
+            <h2 class="location-name" data-bind="html: name, click: $root.focusOnLocationWithDetailOnClick"></h2>
+            <h3 class="location-category" data-bind="html: category"></h3>
+            <div class="location-rating-and-link">
+              <span class="location-rating" data-bind="html: formattedRatingText, style: {color: ratingColor}"></span>
+              <a class="location-link" data-bind="attr:{href: url}"><img class="link-icon" src="images/link-icon.png"></a>
+            </div>
+            <p class="location-address" data-bind="html: formattedAddressText, click: $root.focusOnLocationOnClick"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form id = "name-search" data-bind="submit: submitInput">
+      <input id = "search-query" type="text" name="query" placeholder = "Search a Venue" data-bind="textInput: queryInput">
+      <input id = "reset-button" type=button value="Reset Map" data-bind = "click: reset">
+    </form>
+    <!--<input id = "co-checkin-search" type="text" name="coCheckInName" placeholder = "search a venue by co-checkin">-->
+  </body>
+  <script src="js/model.js"></script>
+  <script src="js/app.js"></script>
+</html>

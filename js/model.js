@@ -7,14 +7,815 @@ var swarmExport =
         {
             "type": "notificationTray",
             "item": {
-                "unreadCount": 0
+                "unreadCount": 13
             }
         }
     ],
     "response": {
         "checkins": {
-            "count": 251,
+            "count": 260,
             "items": [
+                {
+                    "id": "5558f56d498e7f46e17f0412",
+                    "createdAt": 1431893357,
+                    "type": "checkin",
+                    "timeZoneOffset": -240,
+                    "createdBy": {
+                        "id": "56456200",
+                        "firstName": "Alexis",
+                        "lastName": "Liu",
+                        "gender": "female",
+                        "relationship": "friend",
+                        "photo": {
+                            "prefix": "https://irs3.4sqi.net/img/user/",
+                            "suffix": "/56456200-UDCZOU3N4LEOIMCM.jpg"
+                        }
+                    },
+                    "venue": {
+                        "id": "53ff6394498eebee81f7b6f3",
+                        "name": "Vivi Bubble Tea",
+                        "contact": {
+                            "phone": "2129560288",
+                            "formattedPhone": "(212) 956-0288"
+                        },
+                        "location": {
+                            "address": "607 9th Ave",
+                            "lat": 40.75917193163239,
+                            "lng": -73.99206770155075,
+                            "postalCode": "10036",
+                            "cc": "US",
+                            "city": "New York",
+                            "state": "NY",
+                            "country": "United States",
+                            "formattedAddress": [
+                                "607 9th Ave",
+                                "New York, NY 10036"
+                            ]
+                        },
+                        "categories": [
+                            {
+                                "id": "52e81612bcbc57f1066b7a0c",
+                                "name": "Bubble Tea Shop",
+                                "pluralName": "Bubble Tea Shops",
+                                "shortName": "Bubble Tea",
+                                "icon": {
+                                    "prefix": "https://ss3.4sqi.net/img/categories_v2/food/bubble_",
+                                    "suffix": ".png"
+                                },
+                                "primary": true
+                            }
+                        ],
+                        "verified": false,
+                        "stats": {
+                            "checkinsCount": 792,
+                            "usersCount": 396,
+                            "tipCount": 10
+                        },
+                        "url": "http://vivibubbletea.com",
+                        "like": false
+                    },
+                    "likes": {
+                        "count": 0,
+                        "groups": []
+                    },
+                    "like": false,
+                    "isMayor": false,
+                    "photos": {
+                        "count": 0,
+                        "items": []
+                    },
+                    "posts": {
+                        "count": 0,
+                        "textCount": 0
+                    },
+                    "comments": {
+                        "count": 0
+                    },
+                    "source": {
+                        "name": "Swarm for iOS",
+                        "url": "https://www.swarmapp.com"
+                    }
+                },
+                {
+                    "id": "5558e698498e51fc9b15ff32",
+                    "createdAt": 1431889560,
+                    "type": "checkin",
+                    "timeZoneOffset": -240,
+                    "createdBy": {
+                        "id": "56456200",
+                        "firstName": "Alexis",
+                        "lastName": "Liu",
+                        "gender": "female",
+                        "relationship": "friend",
+                        "photo": {
+                            "prefix": "https://irs3.4sqi.net/img/user/",
+                            "suffix": "/56456200-UDCZOU3N4LEOIMCM.jpg"
+                        }
+                    },
+                    "venue": {
+                        "id": "4c2258d69085d13ab22f86cc",
+                        "name": "The LEGO Store",
+                        "contact": {
+                            "phone": "2122455973",
+                            "formattedPhone": "(212) 245-5973"
+                        },
+                        "location": {
+                            "address": "620 5th Ave",
+                            "crossStreet": "at Rockefeller Plaza",
+                            "lat": 40.7586313019459,
+                            "lng": -73.9780604839325,
+                            "postalCode": "10020",
+                            "cc": "US",
+                            "city": "New York",
+                            "state": "NY",
+                            "country": "United States",
+                            "formattedAddress": [
+                                "620 5th Ave (at Rockefeller Plaza)",
+                                "New York, NY 10020"
+                            ]
+                        },
+                        "categories": [
+                            {
+                                "id": "4bf58dd8d48988d1f3941735",
+                                "name": "Toy / Game Store",
+                                "pluralName": "Toy / Game Stores",
+                                "shortName": "Toys & Games",
+                                "icon": {
+                                    "prefix": "https://ss3.4sqi.net/img/categories_v2/shops/toys_",
+                                    "suffix": ".png"
+                                },
+                                "primary": true
+                            }
+                        ],
+                        "verified": true,
+                        "stats": {
+                            "checkinsCount": 18600,
+                            "usersCount": 15885,
+                            "tipCount": 66
+                        },
+                        "url": "http://www.lego.com/en-us",
+                        "like": false,
+                        "storeId": ""
+                    },
+                    "likes": {
+                        "count": 0,
+                        "groups": []
+                    },
+                    "like": false,
+                    "isMayor": false,
+                    "photos": {
+                        "count": 0,
+                        "items": []
+                    },
+                    "posts": {
+                        "count": 0,
+                        "textCount": 0
+                    },
+                    "comments": {
+                        "count": 0
+                    },
+                    "source": {
+                        "name": "Swarm for iOS",
+                        "url": "https://www.swarmapp.com"
+                    }
+                },
+                {
+                    "id": "5558de78498e29be08d8a2cf",
+                    "createdAt": 1431887480,
+                    "type": "checkin",
+                    "timeZoneOffset": -240,
+                    "createdBy": {
+                        "id": "56456200",
+                        "firstName": "Alexis",
+                        "lastName": "Liu",
+                        "gender": "female",
+                        "relationship": "friend",
+                        "photo": {
+                            "prefix": "https://irs3.4sqi.net/img/user/",
+                            "suffix": "/56456200-UDCZOU3N4LEOIMCM.jpg"
+                        }
+                    },
+                    "venue": {
+                        "id": "530a890411d28034f6a6d1b2",
+                        "name": "bulb concepts",
+                        "contact": {
+                            "phone": "2122289623",
+                            "formattedPhone": "(212) 228-9623"
+                        },
+                        "location": {
+                            "address": "13 East 7th Street",
+                            "crossStreet": "Cooper Square",
+                            "lat": 40.72864409985107,
+                            "lng": -73.98998447863148,
+                            "postalCode": "10003",
+                            "cc": "US",
+                            "city": "New York",
+                            "state": "NY",
+                            "country": "United States",
+                            "formattedAddress": [
+                                "13 East 7th Street (Cooper Square)",
+                                "New York, NY 10003"
+                            ]
+                        },
+                        "categories": [
+                            {
+                                "id": "4bf58dd8d48988d1f8941735",
+                                "name": "Furniture / Home Store",
+                                "pluralName": "Furniture / Home Stores",
+                                "shortName": "Furniture / Home",
+                                "icon": {
+                                    "prefix": "https://ss3.4sqi.net/img/categories_v2/shops/furniture_",
+                                    "suffix": ".png"
+                                },
+                                "primary": true
+                            }
+                        ],
+                        "verified": false,
+                        "stats": {
+                            "checkinsCount": 13,
+                            "usersCount": 13,
+                            "tipCount": 2
+                        },
+                        "url": "http://bulbconcepts.com",
+                        "like": false
+                    },
+                    "likes": {
+                        "count": 0,
+                        "groups": []
+                    },
+                    "like": false,
+                    "isMayor": false,
+                    "photos": {
+                        "count": 0,
+                        "items": []
+                    },
+                    "posts": {
+                        "count": 0,
+                        "textCount": 0
+                    },
+                    "comments": {
+                        "count": 0
+                    },
+                    "source": {
+                        "name": "Swarm for iOS",
+                        "url": "https://www.swarmapp.com"
+                    }
+                },
+                {
+                    "id": "5558be4c498e8e11c200b025",
+                    "createdAt": 1431879244,
+                    "type": "checkin",
+                    "timeZoneOffset": -240,
+                    "createdBy": {
+                        "id": "56456200",
+                        "firstName": "Alexis",
+                        "lastName": "Liu",
+                        "gender": "female",
+                        "relationship": "friend",
+                        "photo": {
+                            "prefix": "https://irs3.4sqi.net/img/user/",
+                            "suffix": "/56456200-UDCZOU3N4LEOIMCM.jpg"
+                        }
+                    },
+                    "venue": {
+                        "id": "439df386f964a520072c1fe3",
+                        "name": "Three of Cups",
+                        "contact": {
+                            "phone": "2123880059",
+                            "formattedPhone": "(212) 388-0059",
+                            "twitter": "3ofcupsnyc"
+                        },
+                        "location": {
+                            "address": "83 1st Ave",
+                            "crossStreet": "at E 5th St.",
+                            "lat": 40.725827771808255,
+                            "lng": -73.98643970489502,
+                            "postalCode": "10003",
+                            "cc": "US",
+                            "city": "New York",
+                            "state": "NY",
+                            "country": "United States",
+                            "formattedAddress": [
+                                "83 1st Ave (at E 5th St.)",
+                                "New York, NY 10003"
+                            ]
+                        },
+                        "categories": [
+                            {
+                                "id": "4bf58dd8d48988d110941735",
+                                "name": "Italian Restaurant",
+                                "pluralName": "Italian Restaurants",
+                                "shortName": "Italian",
+                                "icon": {
+                                    "prefix": "https://ss3.4sqi.net/img/categories_v2/food/italian_",
+                                    "suffix": ".png"
+                                },
+                                "primary": true
+                            }
+                        ],
+                        "verified": true,
+                        "stats": {
+                            "checkinsCount": 9850,
+                            "usersCount": 5853,
+                            "tipCount": 79
+                        },
+                        "url": "http://threeofcupsnyc.com",
+                        "hasMenu": true,
+                        "like": false,
+                        "delivery": {
+                            "url": "http://www.seamless.com/food-delivery/restaurant.22040.r?a=1026&utm_source=Foursquare&utm_medium=affiliate&utm_campaign=SeamlessOrderDeliveryLink",
+                            "provider": {
+                                "name": "seamless"
+                            }
+                        },
+                        "menu": {
+                            "type": "Menu",
+                            "label": "Menu",
+                            "anchor": "View Menu",
+                            "url": "https://foursquare.com/v/three-of-cups/439df386f964a520072c1fe3/menu",
+                            "mobileUrl": "https://foursquare.com/v/439df386f964a520072c1fe3/device_menu",
+                            "externalUrl": "http://www.threeofcupsnyc.com/Menu_Dinner"
+                        },
+                        "venuePage": {
+                            "id": "75801605"
+                        }
+                    },
+                    "likes": {
+                        "count": 0,
+                        "groups": []
+                    },
+                    "like": false,
+                    "isMayor": false,
+                    "photos": {
+                        "count": 0,
+                        "items": []
+                    },
+                    "posts": {
+                        "count": 0,
+                        "textCount": 0
+                    },
+                    "comments": {
+                        "count": 0
+                    },
+                    "source": {
+                        "name": "Swarm for iOS",
+                        "url": "https://www.swarmapp.com"
+                    }
+                },
+                {
+                    "id": "5557a79e498e1e1036f05d98",
+                    "createdAt": 1431807902,
+                    "type": "checkin",
+                    "timeZoneOffset": -240,
+                    "createdBy": {
+                        "id": "56456200",
+                        "firstName": "Alexis",
+                        "lastName": "Liu",
+                        "gender": "female",
+                        "relationship": "friend",
+                        "photo": {
+                            "prefix": "https://irs3.4sqi.net/img/user/",
+                            "suffix": "/56456200-UDCZOU3N4LEOIMCM.jpg"
+                        }
+                    },
+                    "venue": {
+                        "id": "4ae37ac8f964a520a49521e3",
+                        "name": "Lam Zhou Handmade Noodle",
+                        "contact": {
+                            "phone": "2125666933",
+                            "formattedPhone": "(212) 566-6933"
+                        },
+                        "location": {
+                            "address": "144 E Broadway",
+                            "crossStreet": "at Pike St.",
+                            "lat": 40.714004939635096,
+                            "lng": -73.99123556287765,
+                            "postalCode": "10002",
+                            "cc": "US",
+                            "city": "New York",
+                            "state": "NY",
+                            "country": "United States",
+                            "formattedAddress": [
+                                "144 E Broadway (at Pike St.)",
+                                "New York, NY 10002"
+                            ]
+                        },
+                        "categories": [
+                            {
+                                "id": "4bf58dd8d48988d1d1941735",
+                                "name": "Ramen / Noodle House",
+                                "pluralName": "Ramen / Noodle Houses",
+                                "shortName": "Ramen / Noodles",
+                                "icon": {
+                                    "prefix": "https://ss3.4sqi.net/img/categories_v2/food/ramen_",
+                                    "suffix": ".png"
+                                },
+                                "primary": true
+                            }
+                        ],
+                        "verified": false,
+                        "stats": {
+                            "checkinsCount": 5278,
+                            "usersCount": 2502,
+                            "tipCount": 136
+                        },
+                        "like": false,
+                        "menu": {
+                            "type": "Menu",
+                            "label": "Menu",
+                            "anchor": "View Menu",
+                            "url": "http://www.menupages.com/restaurants/lam-zhou/menu",
+                            "mobileUrl": "http://www.menupages.com/restaurants/lam-zhou/menu",
+                            "externalUrl": "http://www.menupages.com/restaurants/lam-zhou/menu"
+                        }
+                    },
+                    "likes": {
+                        "count": 0,
+                        "groups": []
+                    },
+                    "like": false,
+                    "isMayor": false,
+                    "photos": {
+                        "count": 0,
+                        "items": []
+                    },
+                    "posts": {
+                        "count": 0,
+                        "textCount": 0
+                    },
+                    "comments": {
+                        "count": 0
+                    },
+                    "source": {
+                        "name": "Swarm for iOS",
+                        "url": "https://www.swarmapp.com"
+                    }
+                },
+                {
+                    "id": "55579c2c498e1f093ed352f7",
+                    "createdAt": 1431804972,
+                    "type": "checkin",
+                    "timeZoneOffset": -240,
+                    "createdBy": {
+                        "id": "56456200",
+                        "firstName": "Alexis",
+                        "lastName": "Liu",
+                        "gender": "female",
+                        "relationship": "friend",
+                        "photo": {
+                            "prefix": "https://irs3.4sqi.net/img/user/",
+                            "suffix": "/56456200-UDCZOU3N4LEOIMCM.jpg"
+                        }
+                    },
+                    "venue": {
+                        "id": "507820cee4b0bf54e0b19f39",
+                        "name": "The Sill",
+                        "contact": {
+                            "twitter": "thesill"
+                        },
+                        "location": {
+                            "address": "84 Hester St",
+                            "lat": 40.71755674822056,
+                            "lng": -73.99287688121208,
+                            "postalCode": "10002",
+                            "cc": "US",
+                            "city": "New York",
+                            "state": "NY",
+                            "country": "United States",
+                            "formattedAddress": [
+                                "84 Hester St",
+                                "New York, NY 10002"
+                            ]
+                        },
+                        "categories": [
+                            {
+                                "id": "4bf58dd8d48988d15a941735",
+                                "name": "Garden",
+                                "pluralName": "Gardens",
+                                "shortName": "Garden",
+                                "icon": {
+                                    "prefix": "https://ss3.4sqi.net/img/categories_v2/parks_outdoors/garden_",
+                                    "suffix": ".png"
+                                },
+                                "primary": true
+                            }
+                        ],
+                        "verified": false,
+                        "stats": {
+                            "checkinsCount": 75,
+                            "usersCount": 36,
+                            "tipCount": 1
+                        },
+                        "url": "http://www.thesill.com",
+                        "like": false
+                    },
+                    "likes": {
+                        "count": 0,
+                        "groups": []
+                    },
+                    "like": false,
+                    "isMayor": false,
+                    "photos": {
+                        "count": 0,
+                        "items": []
+                    },
+                    "posts": {
+                        "count": 0,
+                        "textCount": 0
+                    },
+                    "comments": {
+                        "count": 0
+                    },
+                    "source": {
+                        "name": "Swarm for iOS",
+                        "url": "https://www.swarmapp.com"
+                    }
+                },
+                {
+                    "id": "55579bde498e55d27d06c7f3",
+                    "createdAt": 1431804894,
+                    "type": "checkin",
+                    "timeZoneOffset": -240,
+                    "createdBy": {
+                        "id": "56456200",
+                        "firstName": "Alexis",
+                        "lastName": "Liu",
+                        "gender": "female",
+                        "relationship": "friend",
+                        "photo": {
+                            "prefix": "https://irs3.4sqi.net/img/user/",
+                            "suffix": "/56456200-UDCZOU3N4LEOIMCM.jpg"
+                        }
+                    },
+                    "venue": {
+                        "id": "4bf1ae60324cc9b6b652cc92",
+                        "name": "Hou Yi Hot Pot",
+                        "contact": {
+                            "phone": "2126258989",
+                            "formattedPhone": "(212) 625-8989"
+                        },
+                        "location": {
+                            "address": "92 Hester St",
+                            "crossStreet": "btwn Grand St and Broome St",
+                            "lat": 40.71798927264901,
+                            "lng": -73.9918577671051,
+                            "postalCode": "10002",
+                            "cc": "US",
+                            "city": "New York",
+                            "state": "NY",
+                            "country": "United States",
+                            "formattedAddress": [
+                                "92 Hester St (btwn Grand St and Broome St)",
+                                "New York, NY 10002"
+                            ]
+                        },
+                        "categories": [
+                            {
+                                "id": "4bf58dd8d48988d145941735",
+                                "name": "Chinese Restaurant",
+                                "pluralName": "Chinese Restaurants",
+                                "shortName": "Chinese",
+                                "icon": {
+                                    "prefix": "https://ss3.4sqi.net/img/categories_v2/food/asian_",
+                                    "suffix": ".png"
+                                },
+                                "primary": true
+                            }
+                        ],
+                        "verified": false,
+                        "stats": {
+                            "checkinsCount": 2516,
+                            "usersCount": 1603,
+                            "tipCount": 49
+                        },
+                        "like": false
+                    },
+                    "likes": {
+                        "count": 0,
+                        "groups": []
+                    },
+                    "like": false,
+                    "isMayor": false,
+                    "photos": {
+                        "count": 0,
+                        "items": []
+                    },
+                    "posts": {
+                        "count": 0,
+                        "textCount": 0
+                    },
+                    "comments": {
+                        "count": 0
+                    },
+                    "source": {
+                        "name": "Swarm for iOS",
+                        "url": "https://www.swarmapp.com"
+                    }
+                },
+                {
+                    "id": "555530a9498e40e84baec669",
+                    "createdAt": 1431646377,
+                    "type": "checkin",
+                    "timeZoneOffset": -240,
+                    "createdBy": {
+                        "id": "56456200",
+                        "firstName": "Alexis",
+                        "lastName": "Liu",
+                        "gender": "female",
+                        "relationship": "friend",
+                        "photo": {
+                            "prefix": "https://irs3.4sqi.net/img/user/",
+                            "suffix": "/56456200-UDCZOU3N4LEOIMCM.jpg"
+                        }
+                    },
+                    "venue": {
+                        "id": "53ff6394498eebee81f7b6f3",
+                        "name": "Vivi Bubble Tea",
+                        "contact": {
+                            "phone": "2129560288",
+                            "formattedPhone": "(212) 956-0288"
+                        },
+                        "location": {
+                            "address": "607 9th Ave",
+                            "lat": 40.75917193163239,
+                            "lng": -73.99206770155075,
+                            "postalCode": "10036",
+                            "cc": "US",
+                            "city": "New York",
+                            "state": "NY",
+                            "country": "United States",
+                            "formattedAddress": [
+                                "607 9th Ave",
+                                "New York, NY 10036"
+                            ]
+                        },
+                        "categories": [
+                            {
+                                "id": "52e81612bcbc57f1066b7a0c",
+                                "name": "Bubble Tea Shop",
+                                "pluralName": "Bubble Tea Shops",
+                                "shortName": "Bubble Tea",
+                                "icon": {
+                                    "prefix": "https://ss3.4sqi.net/img/categories_v2/food/bubble_",
+                                    "suffix": ".png"
+                                },
+                                "primary": true
+                            }
+                        ],
+                        "verified": false,
+                        "stats": {
+                            "checkinsCount": 792,
+                            "usersCount": 396,
+                            "tipCount": 10
+                        },
+                        "url": "http://vivibubbletea.com",
+                        "like": false
+                    },
+                    "likes": {
+                        "count": 0,
+                        "groups": []
+                    },
+                    "like": false,
+                    "isMayor": false,
+                    "photos": {
+                        "count": 0,
+                        "items": []
+                    },
+                    "posts": {
+                        "count": 0,
+                        "textCount": 0
+                    },
+                    "comments": {
+                        "count": 0
+                    },
+                    "source": {
+                        "name": "Swarm for iOS",
+                        "url": "https://www.swarmapp.com"
+                    }
+                },
+                {
+                    "id": "55514009498e57527f6af8d2",
+                    "createdAt": 1431388169,
+                    "type": "checkin",
+                    "timeZoneOffset": -240,
+                    "createdBy": {
+                        "id": "56456200",
+                        "firstName": "Alexis",
+                        "lastName": "Liu",
+                        "gender": "female",
+                        "relationship": "friend",
+                        "photo": {
+                            "prefix": "https://irs3.4sqi.net/img/user/",
+                            "suffix": "/56456200-UDCZOU3N4LEOIMCM.jpg"
+                        }
+                    },
+                    "venue": {
+                        "id": "40afe980f964a5203bf31ee3",
+                        "name": "AMC Empire 25",
+                        "contact": {
+                            "phone": "2123982597",
+                            "formattedPhone": "(212) 398-2597",
+                            "twitter": "amctheatres",
+                            "facebook": "207108197412",
+                            "facebookUsername": "amctheatres",
+                            "facebookName": "AMC Theatres"
+                        },
+                        "location": {
+                            "address": "234 W 42nd St",
+                            "crossStreet": "btwn 7th & 8th Ave",
+                            "lat": 40.756867499974774,
+                            "lng": -73.98918676469269,
+                            "postalCode": "10036",
+                            "cc": "US",
+                            "city": "New York",
+                            "state": "NY",
+                            "country": "United States",
+                            "formattedAddress": [
+                                "234 W 42nd St (btwn 7th & 8th Ave)",
+                                "New York, NY 10036"
+                            ]
+                        },
+                        "categories": [
+                            {
+                                "id": "4bf58dd8d48988d180941735",
+                                "name": "Multiplex",
+                                "pluralName": "Multiplexes",
+                                "shortName": "Cineplex",
+                                "icon": {
+                                    "prefix": "https://ss3.4sqi.net/img/categories_v2/arts_entertainment/movietheater_",
+                                    "suffix": ".png"
+                                },
+                                "primary": true
+                            }
+                        ],
+                        "verified": true,
+                        "stats": {
+                            "checkinsCount": 75493,
+                            "usersCount": 37498,
+                            "tipCount": 245
+                        },
+                        "url": "http://www.amctheatres.com/movie-theatres/amc-empire-25",
+                        "like": false,
+                        "storeId": "552"
+                    },
+                    "event": {
+                        "id": "552de42d498eea21e202e01b",
+                        "name": "Ex Machina",
+                        "categories": [
+                            {
+                                "id": "4dfb90c6bd413dd705e8f897",
+                                "name": "Movie",
+                                "pluralName": "Movies",
+                                "shortName": "Movie",
+                                "icon": {
+                                    "prefix": "https://ss3.4sqi.net/img/categories_v2/arts_entertainment/movietheater_",
+                                    "suffix": ".png"
+                                },
+                                "primary": true
+                            }
+                        ]
+                    },
+                    "likes": {
+                        "count": 1,
+                        "groups": [
+                            {
+                                "type": "friends",
+                                "count": 1,
+                                "items": [
+                                    {
+                                        "id": "72196799",
+                                        "firstName": "Danny",
+                                        "lastName": "Chiao",
+                                        "gender": "male",
+                                        "relationship": "friend",
+                                        "photo": {
+                                            "prefix": "https://irs1.4sqi.net/img/user/",
+                                            "suffix": "/72196799-AWEYCMO5Y4JKJDHQ.jpg"
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+                        "summary": "Danny Chiao"
+                    },
+                    "like": false,
+                    "isMayor": false,
+                    "photos": {
+                        "count": 0,
+                        "items": []
+                    },
+                    "posts": {
+                        "count": 0,
+                        "textCount": 0
+                    },
+                    "comments": {
+                        "count": 0
+                    },
+                    "source": {
+                        "name": "Swarm for iOS",
+                        "url": "https://www.swarmapp.com"
+                    }
+                },
                 {
                     "id": "554fbae4498e9e486d2de989",
                     "createdAt": 1431288548,
@@ -80,18 +881,38 @@ var swarmExport =
                         ],
                         "verified": false,
                         "stats": {
-                            "checkinsCount": 746,
-                            "usersCount": 377,
+                            "checkinsCount": 792,
+                            "usersCount": 396,
                             "tipCount": 10
                         },
                         "url": "http://vivibubbletea.com",
                         "like": false
                     },
                     "likes": {
-                        "count": 0,
-                        "groups": []
+                        "count": 1,
+                        "groups": [
+                            {
+                                "type": "friends",
+                                "count": 1,
+                                "items": [
+                                    {
+                                        "id": "72196799",
+                                        "firstName": "Danny",
+                                        "lastName": "Chiao",
+                                        "gender": "male",
+                                        "relationship": "friend",
+                                        "photo": {
+                                            "prefix": "https://irs1.4sqi.net/img/user/",
+                                            "suffix": "/72196799-AWEYCMO5Y4JKJDHQ.jpg"
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+                        "summary": "Danny Chiao"
                     },
                     "like": false,
+                    "isMayor": false,
                     "photos": {
                         "count": 0,
                         "items": []
@@ -161,8 +982,8 @@ var swarmExport =
                         ],
                         "verified": false,
                         "stats": {
-                            "checkinsCount": 67,
-                            "usersCount": 48,
+                            "checkinsCount": 73,
+                            "usersCount": 54,
                             "tipCount": 2
                         },
                         "like": false,
@@ -178,6 +999,7 @@ var swarmExport =
                         "groups": []
                     },
                     "like": false,
+                    "isMayor": false,
                     "photos": {
                         "count": 0,
                         "items": []
@@ -248,8 +1070,8 @@ var swarmExport =
                         ],
                         "verified": false,
                         "stats": {
-                            "checkinsCount": 5770,
-                            "usersCount": 2575,
+                            "checkinsCount": 5785,
+                            "usersCount": 2584,
                             "tipCount": 29
                         },
                         "url": "http://rivingtonfb.com",
@@ -268,6 +1090,7 @@ var swarmExport =
                         "groups": []
                     },
                     "like": false,
+                    "isMayor": false,
                     "photos": {
                         "count": 0,
                         "items": []
@@ -337,8 +1160,8 @@ var swarmExport =
                         ],
                         "verified": true,
                         "stats": {
-                            "checkinsCount": 269,
-                            "usersCount": 185,
+                            "checkinsCount": 270,
+                            "usersCount": 186,
                             "tipCount": 3
                         },
                         "like": false,
@@ -351,6 +1174,7 @@ var swarmExport =
                         "groups": []
                     },
                     "like": false,
+                    "isMayor": false,
                     "photos": {
                         "count": 0,
                         "items": []
@@ -420,8 +1244,8 @@ var swarmExport =
                         ],
                         "verified": true,
                         "stats": {
-                            "checkinsCount": 6902,
-                            "usersCount": 4708,
+                            "checkinsCount": 6931,
+                            "usersCount": 4728,
                             "tipCount": 145
                         },
                         "url": "http://www.chaanteahouse.com/site/index.html",
@@ -443,6 +1267,7 @@ var swarmExport =
                         "groups": []
                     },
                     "like": false,
+                    "isMayor": false,
                     "photos": {
                         "count": 0,
                         "items": []
@@ -512,8 +1337,8 @@ var swarmExport =
                         ],
                         "verified": false,
                         "stats": {
-                            "checkinsCount": 7507,
-                            "usersCount": 4553,
+                            "checkinsCount": 7588,
+                            "usersCount": 4596,
                             "tipCount": 197
                         },
                         "url": "http://handynasty.net",
@@ -562,6 +1387,7 @@ var swarmExport =
                         "summary": "John Corbin Qian & David Chen"
                     },
                     "like": false,
+                    "isMayor": false,
                     "photos": {
                         "count": 0,
                         "items": []
@@ -619,8 +1445,8 @@ var swarmExport =
                         ],
                         "verified": false,
                         "stats": {
-                            "checkinsCount": 746,
-                            "usersCount": 377,
+                            "checkinsCount": 792,
+                            "usersCount": 396,
                             "tipCount": 10
                         },
                         "url": "http://vivibubbletea.com",
@@ -650,6 +1476,7 @@ var swarmExport =
                         "summary": "David Chen"
                     },
                     "like": false,
+                    "isMayor": false,
                     "photos": {
                         "count": 0,
                         "items": []
@@ -723,9 +1550,9 @@ var swarmExport =
                         ],
                         "verified": true,
                         "stats": {
-                            "checkinsCount": 19224,
-                            "usersCount": 13994,
-                            "tipCount": 94
+                            "checkinsCount": 19204,
+                            "usersCount": 13980,
+                            "tipCount": 98
                         },
                         "url": "http://www.thedelancey.com",
                         "like": false,
@@ -741,6 +1568,7 @@ var swarmExport =
                         "groups": []
                     },
                     "like": false,
+                    "isMayor": false,
                     "photos": {
                         "count": 0,
                         "items": []
@@ -809,8 +1637,8 @@ var swarmExport =
                         ],
                         "verified": false,
                         "stats": {
-                            "checkinsCount": 746,
-                            "usersCount": 377,
+                            "checkinsCount": 792,
+                            "usersCount": 396,
                             "tipCount": 10
                         },
                         "url": "http://vivibubbletea.com",
@@ -821,6 +1649,7 @@ var swarmExport =
                         "groups": []
                     },
                     "like": false,
+                    "isMayor": false,
                     "photos": {
                         "count": 0,
                         "items": []
@@ -891,8 +1720,8 @@ var swarmExport =
                         ],
                         "verified": false,
                         "stats": {
-                            "checkinsCount": 223,
-                            "usersCount": 167,
+                            "checkinsCount": 230,
+                            "usersCount": 173,
                             "tipCount": 9
                         },
                         "url": "http://www.adellanyc.com",
@@ -911,6 +1740,7 @@ var swarmExport =
                         "groups": []
                     },
                     "like": false,
+                    "isMayor": false,
                     "photos": {
                         "count": 0,
                         "items": []
