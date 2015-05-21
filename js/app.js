@@ -2,312 +2,198 @@
 //Model (refered to as locations)//
 //////////////////////////////////////
 
-var model = {
-    previousSelectedLocation: null,
-    selectedLocation: null,
-    locations: [],
-    //Create a model we will be using based on raw model
-    init: function(){
-        //helper function to help identify unique locations
-        function checkNewLocations(currentLocations, currentItemId){
-            var new_item = true;
-            for (var i in currentLocations) {
-                if(currentLocations[i].id == currentItemId){
-                    new_item = false;
-                    break;
-                }
-            }
-            return new_item;
-        };
-        //use exported json to populate locations. not all fields are populated right away due to limitation in data.
-        for (var item in swarmExport.response.checkins.items) {
-            var item_id = swarmExport.response.checkins.items[item].venue.id;
-            if (checkNewLocations(model.locations, item_id)){
-                var singleLocation = {};
-                singleLocation.id=item_id;
-                singleLocation.venueName=swarmExport.response.checkins.items[item].venue.name;
-                singleLocation.venueUrl=swarmExport.response.checkins.items[item].venue.url;
-                singleLocation.venueFormattedAddress=swarmExport.response.checkins.items[item].venue.location.formattedAddress;
-                singleLocation.venueLat=swarmExport.response.checkins.items[item].venue.location.lat;
-                singleLocation.venueLng=swarmExport.response.checkins.items[item].venue.location.lng;
-                singleLocation.venueRating="Not yet rated.";
-                singleLocation.venueCategory="A category of its own";
-                singleLocation.venuePhotos="";
-                model.locations.push(singleLocation);
-            }
-        };
-    },
-    //helper function. provides basic access to elements within the model
-    selectLocationById: function(singleLocationId){
-        for (var i in model.locations){
-            if (model.locations[i].id==singleLocationId){
-                return model.locations[i];
+function venue(rawVenue){
+    'use strict';
+    var self = this;
+    self.id = ko.observable(rawVenue.id);
+    self.name = ko.observable(rawVenue.name);
+    self.url = ko.observable(rawVenue.url);
+    self.formattedAddress = ko.observableArray(rawVenue.location.formattedAddress);
+    self.formattedAddressText = ko.computed(function(){
+        return self.formattedAddress().join("<BR>");
+    });
+    self.lat = ko.observable(rawVenue.location.lat);
+    self.lng = ko.observable(rawVenue.location.lng);
+    self.rating = ko.observable(0);
+    self.formattedRatingText = ko.computed(function(){
+        var ratingText = ko.observable("Not yet rated.");
+        if (self.rating()>0){
+            ratingText(self.rating()+"/10");
+        }
+        return ratingText();
+    });
+    self.ratingColor = ko.computed(function(){
+        var color = ko.observable("#E0E0E0");
+        if (self.rating()>8){
+            color("#00933B");
+        } else if (self.rating()>7){
+            color("#FFC107");
+        } else if (self.rating()>0){
+            color("#f44336");
+        }
+        return color();
+    });
+    self.category = ko.observable("Not yet categorized.");
+    self.photos = ko.observableArray([]);
+    self.marker = ko.computed(function(){
+        return new google.maps.Marker({
+            position: new google.maps.LatLng(self.lat(), self.lng()),
+            id: self.id()
+        });
+    });
+}
+
+//////////////////////////////////////
+//Model (refered to as locations)//
+//////////////////////////////////////
+
+//var masterVenues =ko.observableArray([]);
+
+function ViewModel() {
+    'use strict';
+    var self = this;
+    self.venues = ko.observableArray([]);
+    var checkNewVenue = function (venueId){
+        var newVenue = true;
+        for(var i =0; i<self.venues().length; i++){
+            if (self.venues()[i].id()==venueId){
+                newVenue = false;
                 break;
             }
         }
-    },
-    //helper function. part of the initialization process. Use api to grab the latest pictures and other missing fields.
-    getRatings: function(){
-        for (var i in model.locations){
-            $.ajax({
-                'async':true,
-                'global':false,
-                'url':'https://api.foursquare.com/v2/venues/'+model.locations[i].id+'?client_id=TU0ODIPVH3EANT0JA5KYHWH0HUNXQB5PGJ4JKUL3ZCTQZHC4&client_secret=KZHUSP0CU2QUB3LYTABAAZJGFP3GBHM05NV1ILF2E31ODKQX&v=20150513',
-                'dataType':"json",
-                'success': function (data){
-                    for (var j in model.locations) {
-                        if (model.locations[j].id==data['response']['venue']['id']){
-                            model.locations[j].venueRating=data['response']['venue']['rating'];
-                            model.locations[j].venueCategory=data.response.venue.categories[0].name;
-                            model.locations[j].venuePhotos=data.response.venue.photos.groups[0].items;
-                        }
+        return newVenue;
+    };
+
+    for (var i = 0; i< swarmExport.response.checkins.items.length; i++){
+        var itemId = swarmExport.response.checkins.items[i].venue.id;
+        if (checkNewVenue(itemId)){
+            self.venues.push(new venue(swarmExport.response.checkins.items[i].venue));
+        }
+    }
+
+    for (var i = 0; i<self.venues().length; i++){
+        $.ajax({
+            'async':true,
+            'global':false,
+            'url':'https://api.foursquare.com/v2/venues/'+self.venues()[i].id()+'?client_id=TU0ODIPVH3EANT0JA5KYHWH0HUNXQB5PGJ4JKUL3ZCTQZHC4&client_secret=KZHUSP0CU2QUB3LYTABAAZJGFP3GBHM05NV1ILF2E31ODKQX&v=20150520',
+            'dataType':"json",
+            'success': function (data){
+                for (var j =0; j<self.venues().length; j++) {
+                    if (self.venues()[j].id()==data.response.venue.id){
+                        if(data.response.venue.rating>0){self.venues()[j].rating(data.response.venue.rating);}
+                        if(data.response.venue.categories[0].name.length>0){self.venues()[j].category(data.response.venue.categories[0].name);}
+                        if(data.response.venue.photos.groups[0].items.length>0){self.venues()[j].photos(data.response.venue.photos.groups[0].items);}
                     }
                 }
-            })
-        }
-    }
-}
-
-
-
-
-
-//////////////////////////////////////
-//Model View Controller//
-//////////////////////////////////////
-
-var modelViewController={
-    //initialize the app
-    init: function(locations){
-        model.init();
-        model.getRatings();
-        mapView.initMap(model.locations)
-        setTimeout(function(){ // wait for ajaxcall to populate the rest of the model
-            mapView.initSideBar(model.locations);
-        },750);
-    },
-
-    //Clicking on a location name, location address, or location marker will zoom the map to that location.
-    setCurrentLocation: function(location_id){
-        model.previousSelectedLocation = model.selectedLocation;
-        if(model.previousSelectedLocation){
-            mapView.unfocusOnMarker(model.previousSelectedLocation);
-            mapView.closeInfoWindow();
-        }
-        model.selectedLocation = model.selectLocationById(location_id);
-        mapView.zoomToLocation(model.selectedLocation);
-        mapView.focusOnMarker(model.selectedLocation);
-    },
-
-    //Clicking on a location name or location marker will display the details of that location in a infoWindow on the map.
-    expandCurrentLocation: function(location_id){
-        model.previousSelectedLocation = model.selectedLocation;
-        mapView.initInfoWindow(model.selectedLocation);        
-    },
-
-    //Search for locations using a query. Name, cateogry and formattedaddress are all searchable fields.
-    searchByName:function(query){
-        if (query.length>0){ //works only when query has content
-            var filteredLocations = []; //create a list of search results
-            for (var i in model.locations){
-                if (model.locations[i].venueName.toLowerCase().search(query.toLowerCase())>=0||model.locations[i].venueFormattedAddress.toString().toLowerCase().search(query.toLowerCase())>=0||model.locations[i].venueCategory.toLowerCase().search(query.toLowerCase())>=0){
-                    filteredLocations.push(model.locations[i]);
-                }
             }
-            modelViewController.reset(); //reset the MVC before populating the map with search results.
-            mapView.showSelectLocations(filteredLocations);
-        }
-    },
-    //reset the MVC to the initial state.
-    reset: function(){
-        mapView.showSelectLocations(model.locations);
-        if (model.selectedLocation){
-            mapView.unfocusOnMarker(model.selectedLocation);
-        }
-        mapView.closeInfoWindow();
-        model.selectedLocation = null;
-        model.previousSelectedLocation = null;
+        });
     }
-}
 
+    self.queryInput = ko.observable();
 
-//////////////////////////////////////
-//View//
-//////////////////////////////////////
-var mapView = {
-    map: new google.maps.Map(document.getElementById('map-canvas')), //create a new map
-    markers:[], //list of displayed markers
-    //helper function to set center and bounds of a map from a given list of locations
-    setMapCenterAndBound: function(locations){
-        //need midpoint and boundary to make the map look nice.
-        var midpoint = {};
-        var lat_min = locations[0].venueLat;
-        var lat_max = locations[0].venueLat;
-        var lng_min = locations[0].venueLng;
-        var lng_max = locations[0].venueLng;
-        for (var i in locations){
-            if(locations[i].venueLat > lat_max)
-                lat_max = locations[i].venueLat;
-            else if(locations[i].venueLat < lat_min)
-                lat_min = locations[i].venueLat;
-            if(locations[i].venueLng > lng_max)
-                lng_max = locations[i].venueLng;
-            else if(locations[i].venueLng < lng_min)
-                lng_min = locations[i].venueLng;
+    self.query = ko.observable();
+
+    self.filteredVenues = ko.computed(function(){
+        if(!self.query()){
+            return self.venues();
+        } else {
+            return ko.utils.arrayFilter(self.venues(), function(venue){
+                return venue.name().toLowerCase().search(self.query().toLowerCase())>=0||venue.formattedAddress().toString().toLowerCase().search(self.query().toLowerCase())>=0||venue.category().toLowerCase().search(self.query().toLowerCase())>=0;
+            });
         }
-        midpoint.lat = (lat_max+lat_min)/2;
-        midpoint.lng = (lng_max+lng_min)/2;
-        var center=new google.maps.LatLng(midpoint.lat,midpoint.lng);
-        mapView.map.setCenter(center);
-        var bounds = new google.maps.LatLngBounds(); //create a new bounds
-        var ne = new google.maps.LatLng(lat_max,lng_max); //coordinate of one corner
-        var sw = new google.maps.LatLng(lat_min,lng_min); //coordinate of the opposite corner
+    });
+
+    self.submitInput = function(){
+        self.query(self.queryInput());
+        cleanMap();
+        drawMap();
+    };
+
+    self.reset = function(){
+        self.query(null);
+        self.queryInput(null);
+        cleanMap();
+        drawMap();
+    };
+
+    var map = new google.maps.Map(document.getElementById('map-canvas'));
+    google.maps.event.addDomListener(window, "resize", function() {
+            var newCenter = map.getCenter();
+            google.maps.event.trigger(map, "resize");
+            map.setCenter(newCenter);
+            //mapView.map.setZoom(calculateZoom());
+    });
+
+    function drawMap(){
+        var midpoint = {};
+        var latMin = ko.observable(self.filteredVenues()[0].lat());
+        var latMax = ko.observable(self.filteredVenues()[0].lat());
+        var lngMin = ko.observable(self.filteredVenues()[0].lng());
+        var lngMax = ko.observable(self.filteredVenues()[0].lng());
+        for (var i=0; i< self.filteredVenues().length; i++){
+            if(self.filteredVenues()[i].lat() > latMax())
+                latMax(self.filteredVenues()[i].lat());
+            else if(self.filteredVenues()[i].lat() < latMin())
+                latMin(self.filteredVenues()[i].lat());
+            if(self.filteredVenues()[i].lng() > lngMax())
+                lngMax(self.filteredVenues()[i].lng());
+            else if(self.filteredVenues()[i].lng() < lngMin())
+                lngMin(self.filteredVenues()[i].lng());
+        }
+        midpoint.lat = ko.computed(function(){return (latMax()+latMin())/2;});
+        midpoint.lng = ko.computed(function(){return (lngMax()+lngMin())/2;});
+        var center = new google.maps.LatLng(midpoint.lat(), midpoint.lng());
+        map.setCenter(center);
+        var bounds = new google.maps.LatLngBounds();
+        var ne = new google.maps.LatLng(latMax(), lngMax());
+        var sw = new google.maps.LatLng(latMin(), lngMin());
         bounds.extend(ne);
         bounds.extend(sw);
-        mapView.map.fitBounds(bounds);
-    },
-    //create a map from a list of locations
-    initMap: function(locations){
-        mapView.setMapCenterAndBound(locations); //fit the location of the map
-        //create markers
-        for (var i in locations){ 
-            var myLat = locations[i].venueLat;
-            var myLng = locations[i].venueLng;
-            var myLatLng = new google.maps.LatLng(myLat,myLng);
-            var marker = new google.maps.Marker({
-                position: myLatLng,
-                map:mapView.map,
-                id:locations[i].id
+        map.fitBounds(bounds);
+        if (map.getZoom() > 18){
+            map.setZoom(18);
+        }
+
+        for (var i =0; i<self.venues().length; i++){
+            self.venues()[i].marker().setMap(null);
+        }
+
+        for (var i =0; i<self.filteredVenues().length; i++){
+            self.filteredVenues()[i].marker().setMap(map);
+            google.maps.event.addListener(self.filteredVenues()[i].marker(), 'click', function(){
+                focusOnLocationWithDetail(this);
             });
-            //on click, go to the current location and show more details.
-            google.maps.event.addListener(marker, 'click', function(){
-                modelViewController.setCurrentLocation(this.id);
-                modelViewController.expandCurrentLocation(this.id);
-            })
-            mapView.markers.push(marker);
         }
-        google.maps.event.addDomListener(window, "resize", function() {
-            var newCenter = mapView.map.getCenter();
-            google.maps.event.trigger(mapView.map, "resize");
-            mapView.map.setCenter(newCenter);
-            //mapView.map.setZoom(calculateZoom());
-        });
-    },
-    // create a side bar
-    initSideBar: function (locations){
-        var tempLocations = document.createDocumentFragment();
-        tempLocations.id = "tempLocation";
-        for (var i in locations) {
-            tempLocations.appendChild(mapView.initLocation(locations[i], i));
-        }
-        $("#loading-wheel").hide() //get ride of the loading wheel
-        document.querySelector("#side-bar-body").appendChild(tempLocations);
-    },
-    // create a location div that goes inside the side bar. Counter is used to make the div look better.
-    initLocation: function(singleLocation, counter){
-        //create a container
-        var locationContainer = document.createElement("div");
-        locationContainer.id=singleLocation.id
-        locationContainer.classList.add("location-profile");
-        //make the container look more Google-esque
-        var styleCounter = counter%4
-        if( styleCounter == 0 ){
-            locationContainer.style.borderBottom = "3px solid #3F51B5";
-        } else if( styleCounter == 1 ){
-            locationContainer.style.borderBottom = "3px solid #F44336";
-        } else if( styleCounter == 2 ){
-            locationContainer.style.borderBottom = "3px solid #FFC107";
-        } else{
-            locationContainer.style.borderBottom = "3px solid green";
-        }
+    }
 
-        //add name element. on click, go to the current location and show more details.
-        var locationName = document.createElement("h2");
-        locationName.classList.add("location-name");
-        locationName.innerHTML = singleLocation.venueName;
-        locationName.addEventListener("click",function(){
-            modelViewController.setCurrentLocation(singleLocation.id);
-            modelViewController.expandCurrentLocation(singleLocation.id);
-        });
-        locationContainer.appendChild(locationName);
+    drawMap();
 
-        //add category
-        var locationCategory = document.createElement("h3");
-        locationCategory.classList.add("location-category");
-        locationCategory.innerHTML = singleLocation.venueCategory;
-        locationContainer.appendChild(locationCategory);
+    var infoWindow = new google.maps.InfoWindow();
 
-        //add location and rating
-        var locationRatingAndLink = document.createElement("div");
-        locationRatingAndLink.classList.add("location-rating-and-link");
-        locationContainer.appendChild(locationRatingAndLink);
-
-        var locationRating = document.createElement("span");
-        locationRating.classList.add("location-rating");
-        //change color based on the rating of the venue
-        if (singleLocation.venueRating){
-            locationRating.innerHTML = singleLocation.venueRating+"/10";
-            if(singleLocation.venueRating>8){
-                locationRating.style.color = "green";
-            } else if (singleLocation.venueRating>7) {
-                locationRating.style.color = "#FFC107";
-            } else{
-                locationRating.style.color = "red";
-            }
-        } else (
-            locationRating.innerHTML = "Not yet rated."
-        )
-        locationRatingAndLink.appendChild(locationRating);
-
-        //add link to a link logo
-        var locationLink = document.createElement("a");
-        locationLink.classList.add("location-link");
-        locationLink.href = singleLocation.venueUrl;
-        locationRatingAndLink.appendChild(locationLink);
-
-        var locationLinkLogo = document.createElement("img");
-        locationLinkLogo.classList.add("link-icon");
-        locationLinkLogo.src = "images/link-icon.png";
-        locationLink.appendChild(locationLinkLogo);
-
-        //add address
-        var locationAddress = document.createElement("p");
-        locationAddress.classList.add("location-address");
-        var tempAddressText = "";
-        for (var i in singleLocation.venueFormattedAddress) {
-            if (i<singleLocation.venueFormattedAddress.length-1){ //no break on the last element
-                tempAddressText = tempAddressText+singleLocation.venueFormattedAddress[i]+"<BR>";
-            } else {
-                tempAddressText = tempAddressText+singleLocation.venueFormattedAddress[i];
+    function initInfoWindow(marker){
+        var venue = null;
+        for (var i =0; i<self.filteredVenues().length; i++){
+            if (self.filteredVenues()[i].id()==marker.id){
+                venue = self.filteredVenues()[i];
+                break;
             }
         }
-        locationAddress.innerHTML = tempAddressText;
-        ///on click, go to the current location.
-        locationAddress.addEventListener("click",function(){modelViewController.setCurrentLocation(singleLocation.id);});//modelViewController.setCurrentLocation(singleLocation.id));
-        locationContainer.appendChild(locationAddress);
+        //create a infoWindow container
 
-        return locationContainer;
-    },
-
-    //create a new infoWindow template
-    infowindow : new google.maps.InfoWindow(),
-    initInfoWindow: function (singleLocation){
-
-        //create a infowindow container
         var infoWindowContainer = document.createElement("div");
-        infoWindowContainer.id = "container-"+singleLocation.id;
+        infoWindowContainer.id = "container-"+venue.id();
         infoWindowContainer.classList.add("info-container");
 
         //create a name element
         var locationName = document.createElement("h2");
         locationName.classList.add("info-location-name");
-        locationName.innerHTML = singleLocation.venueName;
+        locationName.innerHTML = venue.name();
         infoWindowContainer.appendChild(locationName);
 
         //create a category element
         var locationCategory = document.createElement("h3");
         locationCategory.classList.add("location-category");
-        locationCategory.innerHTML = singleLocation.venueCategory;
+        locationCategory.innerHTML = venue.category();
         infoWindowContainer.appendChild(locationCategory);
 
         //add rating and link
@@ -318,25 +204,14 @@ var mapView = {
         //change the color of rating based on the value
         var locationRating = document.createElement("span");
         locationRating.classList.add("location-rating");
-        if (singleLocation.venueRating){
-            locationRating.innerHTML = singleLocation.venueRating+"/10";
-            if(singleLocation.venueRating>8){
-                locationRating.style.color = "green";
-            } else if (singleLocation.venueRating>7) {
-                locationRating.style.color = "#FFC107";
-            } else{
-                locationRating.style.color = "red";
-            }
-        } else (
-            locationRating.innerHTML = "Not yet rated."
-        )
-
+        locationRating.innerHTML = venue.formattedRatingText();
+        locationRating.style.color = venue.ratingColor();
         locationRatingAndLink.appendChild(locationRating);
 
         //add link to the link logo
         var locationLink = document.createElement("a");
         locationLink.classList.add("location-link");
-        locationLink.href = singleLocation.venueUrl;
+        locationLink.href = venue.url();
         locationRatingAndLink.appendChild(locationLink);
 
         var locationLinkLogo = document.createElement("img");
@@ -347,15 +222,7 @@ var mapView = {
         //add address
         var locationAddress = document.createElement("p");
         locationAddress.classList.add("info-location-address");
-        var tempAddressText = "";
-        for (var i in singleLocation.venueFormattedAddress) {
-            if (i<singleLocation.venueFormattedAddress.length-1){
-                tempAddressText = tempAddressText+singleLocation.venueFormattedAddress[i]+"<BR>";
-            } else {
-                tempAddressText = tempAddressText+singleLocation.venueFormattedAddress[i];
-            }
-        }
-        locationAddress.innerHTML = tempAddressText;
+        locationAddress.innerHTML = venue.formattedAddressText();
         infoWindowContainer.appendChild(locationAddress);
 
         //add pictures. sourced from outside
@@ -363,92 +230,60 @@ var mapView = {
         locationPictures.classList.add("location-pictures");
         infoWindowContainer.appendChild(locationPictures);
 
-        for (var i in singleLocation.venuePhotos){
+        for (var i = 0; i<venue.photos().length; i++){
             var locationPicture = document.createElement("img");
             locationPicture.classList.add("location-picture");
-            locationPicture.src = singleLocation.venuePhotos[i].prefix+"200x200"+singleLocation.venuePhotos[i].suffix;
+            locationPicture.src = venue.photos()[i].prefix+"200x200"+venue.photos()[i].suffix;
             locationPictures.appendChild(locationPicture);
         }
 
 
-        mapView.infowindow.setContent(infoWindowContainer);
+        infoWindow.setContent(infoWindowContainer);
 
         //find the relevant marker and open based on that.
-        var marker;
-        for (var i in mapView.markers){
-            if (mapView.markers[i].id == singleLocation.id){
-                marker = mapView.markers[i];
-            }
+        var marker = venue.marker();
+        infoWindow.open(marker.getMap(), marker);
+    }
+
+    var currentVenue = ko.observable();
+    var previousVenue = ko.observable();
+
+    function cleanMap(){
+        if(infoWindow){
+            infoWindow.close();
         }
-        mapView.infowindow.open(marker.getMap(), marker);
-    },
-
-    //helper function. close a info window
-    closeInfoWindow : function(){
-        mapView.infowindow.close();
-    },
-
-    //helper function. zoom to a location.
-    zoomToLocation: function(singleLocation){
-        var newLat = singleLocation.venueLat;
-        var newLng = singleLocation.venueLng;
-        var newCenter = new google.maps.LatLng(newLat, newLng);
-        mapView.map.setCenter(newCenter);
-        mapView.map.setZoom(14);
-    },
-
-    //helpfer function. turns a location marker to blue
-    focusOnMarker: function(singleLocation){
-        var tempId = singleLocation.id;
-        for (var i in mapView.markers){
-            if (mapView.markers[i].id==tempId){
-                map:mapView.markers[i].setIcon("http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-blue.png")
-                break;
-            }
+        if(currentVenue()){
+            currentVenue().setIcon("");
+            currentVenue(null);
         }
-    },
-
-    //helper function. turns a location marker to default.
-    unfocusOnMarker: function(singleLocation){
-        var tempId = singleLocation.id;
-        for (var i in mapView.markers){
-            if (mapView.markers[i].id==tempId){
-                map:mapView.markers[i].setIcon("")
-                break;
-            }
+        if(previousVenue()){
+            previousVenue(null);
         }
-    },
+    }
 
-    //helper function. clean up the side bar and markers
-    cleanMap: function(){
-        for (i in mapView.markers){
-            mapView.markers[i].setMap(null);
-        }
-        $("#side-bar-body > div").hide();
-    },
+    self.focusOnLocationOnClick = function(venue){
+        focusOnLocation(venue.marker());
+    };
 
-    //show selected locations by unhinding relevant divs and markers
-    showSelectLocations: function(selectedLocations){
-        mapView.cleanMap();
-        mapView.setMapCenterAndBound(selectedLocations);
-        for (var i in selectedLocations){
-            $("#"+selectedLocations[i].id).show();
-            for (var j in mapView.markers){
-                if (selectedLocations[i].id==mapView.markers[j].id){
-                    mapView.markers[j].setMap(mapView.map);
-                    break;
-                }
-            }
+    self.focusOnLocationWithDetailOnClick = function(venue){
+        focusOnLocationWithDetail(venue.marker());
+    };
+
+    function focusOnLocationWithDetail(marker){
+        focusOnLocation(marker);
+        initInfoWindow(marker);
+    }
+    function focusOnLocation(marker){
+        infoWindow.close();
+        if(currentVenue()){
+            previousVenue(currentVenue());
+            previousVenue().setIcon("");            
         }
-    },
+        currentVenue(marker);
+        marker.setIcon("http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-blue.png");
+        marker.getMap().setZoom(14);
+        marker.getMap().setCenter(marker.position);
+    }
 }
 
-//initialize the app. attach search and reset functions to relevant input.
-document.addEventListener('DOMContentLoaded', function() {
-  modelViewController.init();
-  $('#name-search').submit(function(event){
-    modelViewController.searchByName($('#name-search input').val());
-    event.preventDefault();
-    });
-  $('#reset-button').click(function(){modelViewController.reset()})//$('#name-search').submit(function(event){modelViewController.searchByName($('#name-search input').val()); event.preventDefault();});
-});
+ko.applyBindings(new ViewModel());

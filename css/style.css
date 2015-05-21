@@ -7,6 +7,24 @@ body{
 	box-shadow: 0px 1px 1px #888888;
 	padding: 5px;
 	margin: 5px;
+	border-bottom-width: 3px;
+	border-bottom-style: solid;
+}
+
+.location-profile:nth-child(4n){
+	border-bottom-color: #00933B;
+}
+
+.location-profile:nth-child(4n+1){
+	border-bottom-color: #3F51B5;
+}
+
+.location-profile:nth-child(4n+2){
+	border-bottom-color: #F44336;
+}
+
+.location-profile:nth-child(4n+3){
+	border-bottom-color: #FFC107;
 }
 
 #map-canvas{
@@ -27,7 +45,7 @@ body{
 }
 
 #side-bar-body{
-	height: -webkit-calc(100% - 50px);
+	height: calc(100% - 50px);
 	overflow: auto;
 }
 
@@ -78,7 +96,6 @@ h1, h2, h3, h4, h5{
 	vertical-align: middle;
 	font-size: 16px;
 	margin-right:10px;
-	color: #E0E0E0;
 }
 
 .link-icon{
