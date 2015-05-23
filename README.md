@@ -19,3 +19,5 @@ Foursquare API Documentation
 Google Map V3 Documentation
 Stack Overflow
 W3 school Documentation
+Knockout JS Documentation
+Offline JS Documentation
