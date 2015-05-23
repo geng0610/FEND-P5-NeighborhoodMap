@@ -1,12 +1,9 @@
-//////////////////////////////////////
-//Model (refered to as locations)//
-//////////////////////////////////////
-
+// helper function to make Google map responsive
 function getMediaState(){
     return window.matchMedia( "screen and (max-device-width: 667px) and (orientation: portrait)" ).matches;
 }
-var mediaState = getMediaState()
 
+// model for each venue.
 function venue(rawVenue){
     'use strict';
     var self = this;
@@ -27,6 +24,7 @@ function venue(rawVenue){
         }
         return ratingText();
     });
+    //used for text color for rating
     self.ratingColor = ko.computed(function(){
         var color = ko.observable("#E0E0E0");
         if (self.rating()>8){
@@ -48,7 +46,8 @@ function venue(rawVenue){
             anchor: null,
             scaledSize: null,
         }
-        if(mediaState){
+        //if on mobile scree, then use a larger marker
+        if(getMediaState()){
             image.scaledSize = new google.maps.Size(88, 160);
         }
         return new google.maps.Marker({
@@ -59,16 +58,12 @@ function venue(rawVenue){
     });
 }
 
-//////////////////////////////////////
-//Model (refered to as locations)//
-//////////////////////////////////////
-
-//var masterVenues =ko.observableArray([]);
-
+//ViewModel
 function ViewModel() {
     'use strict';
     var self = this;
     self.venues = ko.observableArray([]);
+    //helper function to help remove duplicate venues from swarm export
     var checkNewVenue = function (venueId){
         var newVenue = true;
         for(var i =0; i<self.venues().length; i++){
@@ -79,14 +74,14 @@ function ViewModel() {
         }
         return newVenue;
     };
-
+    //converting swarm export JSON to venues.
     for (var i = 0; i< swarmExport.response.checkins.items.length; i++){
         var itemId = swarmExport.response.checkins.items[i].venue.id;
         if (checkNewVenue(itemId)){
             self.venues.push(new venue(swarmExport.response.checkins.items[i].venue));
         }
     }
-
+    //get the latest info on venues using ajax
     for (var i = 0; i<self.venues().length; i++){
         $.ajax({
             'async':true,
@@ -104,13 +99,14 @@ function ViewModel() {
             }
         });
     }
-
+    //bind text of query input to a variable
     self.queryInput = ko.observable();
-
+    //this is the variable we will be using to filter the model
     self.query = ko.observable();
-
+    //this is list of venues we will be using to display info. This way, we don't need to change the entire list of venues.
     self.filteredVenues = ko.computed(function(){
         if(!self.query()){
+            //initially, it's the same as the entire list of venues.
             return self.venues();
         } else {
             return ko.utils.arrayFilter(self.venues(), function(venue){
@@ -119,6 +115,7 @@ function ViewModel() {
         }
     });
 
+    //when input is submit, we run a query.
     self.submitInput = function(){
         self.query(self.queryInput());
         cleanMap();
@@ -131,17 +128,21 @@ function ViewModel() {
         cleanMap();
         drawMap();
     };
+
+    //google map object used in the app
     var map = new google.maps.Map(document.getElementById('map-canvas'));
 
 
-    //force the browser to re-render
     window.addEventListener("resize", function() {
+        //when viewing this app on a small screen and resizing(changing orientation), forcing a reload creates better google map
         if(getMediaState()){
             location.reload()
         }
         var newCenter = map.getCenter();
         google.maps.event.trigger(map, "resize");
         map.setCenter(newCenter);
+
+        //opted out changing marker size dynamically on risize due to issues with changing marker size without re-rendering the whole map.
         /*if(getMediaState){
             for (var i=0; i< self.venues().length; i++){
                 var marker = self.venues()[i].marker();
@@ -165,6 +166,7 @@ function ViewModel() {
         //location.reload();
     }, false);
 
+    //helper function to set boudns and center for the map.
     function setMidPointAndBounds(){
         var midpoint = {};
         var latMin = ko.observable(self.filteredVenues()[0].lat());
@@ -196,12 +198,13 @@ function ViewModel() {
         }
     }
 
+    //create a map using the list of filtered venues.
     function drawMap(){
         setMidPointAndBounds();
         for (var i =0; i<self.venues().length; i++){
             self.venues()[i].marker().setMap(null);
         }
-
+        //drop markers on each venue and bind an event on each click on marker.
         for (var i =0; i<self.filteredVenues().length; i++){
             self.filteredVenues()[i].marker().setMap(map);
             google.maps.event.addListener(self.filteredVenues()[i].marker(), 'click', function(){
@@ -209,9 +212,10 @@ function ViewModel() {
             });
         }
     }
-
+    //initiate map.
     drawMap();
 
+    //this is object for a google map info windo.
     var infoWindow = new google.maps.InfoWindow();
 
     function initInfoWindow(marker){
@@ -222,8 +226,9 @@ function ViewModel() {
                 break;
             }
         }
+        //tried to do a databind in knockout, but this was a more straightforward way to generate the info window.
+        
         //create a infoWindow container
-
         var infoWindowContainer = document.createElement("div");
         infoWindowContainer.id = "container-"+venue.id();
         infoWindowContainer.classList.add("info-container");
@@ -285,13 +290,13 @@ function ViewModel() {
         infoWindow.setContent(infoWindowContainer);
 
         //find the relevant marker and open based on that.
-        var marker = venue.marker();
         infoWindow.open(marker.getMap(), marker);
     }
 
     var currentVenue = ko.observable();
     var previousVenue = ko.observable();
 
+    //clean up the map
     function cleanMap(){
         if(infoWindow){
             infoWindow.close();
@@ -305,37 +310,44 @@ function ViewModel() {
         }
     }
 
+    //on clickof a location venue address, focus on location.
     self.focusOnLocationOnClick = function(venue){
         focusOnLocation(venue.marker());
     };
 
+    //on clickof a location venue name, focus on location and show detail.
     self.focusOnLocationWithDetailOnClick = function(venue){
         focusOnLocationWithDetail(venue.marker());
     };
 
+    //on click of a marker,focus on a location of the marker and show info window.
     function focusOnLocationWithDetail(marker){
         focusOnLocation(marker);
         initInfoWindow(marker);
     }
+    //focus the map on a given marker.
     function focusOnLocation(marker){
         infoWindow.close();
         if(currentVenue()){
             previousVenue(currentVenue());
             var image = marker.getIcon();
+            //using default icon image.
             image.url = "http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png";
             previousVenue().setIcon(image);            
         }
         currentVenue(marker);
         var image = marker.getIcon();
+        //using focused icon image.
         image.url = "http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-blue.png";
         marker.setIcon(image);
         var zoomLevel = 14
-        if(mediaState){
+        //making zoom responsive.
+        if(getMediaState()){
             zoomLevel = 16
         }
         marker.getMap().setZoom(zoomLevel);
         marker.getMap().setCenter(marker.position);
     }
 }
-
+//apply data bind to the view.
 ko.applyBindings(new ViewModel());
