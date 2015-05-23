@@ -2,6 +2,11 @@
 //Model (refered to as locations)//
 //////////////////////////////////////
 
+function getMediaState(){
+    return window.matchMedia( "screen and (max-device-width: 667px) and (orientation: portrait)" ).matches;
+}
+var mediaState = getMediaState()
+
 function venue(rawVenue){
     'use strict';
     var self = this;
@@ -36,7 +41,18 @@ function venue(rawVenue){
     self.category = ko.observable("Not yet categorized.");
     self.photos = ko.observableArray([]);
     self.marker = ko.computed(function(){
+        var image = {
+            url: "http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png",
+            size: null,
+            origin: null,
+            anchor: null,
+            scaledSize: null,
+        }
+        if(mediaState){
+            image.scaledSize = new google.maps.Size(88, 160);
+        }
         return new google.maps.Marker({
+            icon: image,
             position: new google.maps.LatLng(self.lat(), self.lng()),
             id: self.id()
         });
@@ -115,16 +131,41 @@ function ViewModel() {
         cleanMap();
         drawMap();
     };
-
     var map = new google.maps.Map(document.getElementById('map-canvas'));
-    google.maps.event.addDomListener(window, "resize", function() {
-            var newCenter = map.getCenter();
-            google.maps.event.trigger(map, "resize");
-            map.setCenter(newCenter);
-            //mapView.map.setZoom(calculateZoom());
-    });
 
-    function drawMap(){
+
+    //force the browser to re-render
+    window.addEventListener("resize", function() {
+        if(getMediaState()){
+            location.reload()
+        }
+        var newCenter = map.getCenter();
+        google.maps.event.trigger(map, "resize");
+        map.setCenter(newCenter);
+        /*if(getMediaState){
+            for (var i=0; i< self.venues().length; i++){
+                var marker = self.venues()[i].marker();
+                var image = marker.getIcon();
+                image.scaledSize = new google.maps.Size(88, 160);
+                marker.setIcon(image);
+            }
+        } else {
+            for (var i=0; i< self.venues().length; i++){
+                var marker = self.venues()[i].marker();
+                var image = marker.getIcon();
+                image.scaledSize = new google.maps.Size(22, 40);
+                marker.setIcon(image);
+            }
+        }
+        setMidPointAndBounds();
+        drawMap();
+        if(currentVenue()){
+            focusOnLocationWithDetail(currentVenue());            
+        }*/
+        //location.reload();
+    }, false);
+
+    function setMidPointAndBounds(){
         var midpoint = {};
         var latMin = ko.observable(self.filteredVenues()[0].lat());
         var latMax = ko.observable(self.filteredVenues()[0].lat());
@@ -153,7 +194,10 @@ function ViewModel() {
         if (map.getZoom() > 18){
             map.setZoom(18);
         }
+    }
 
+    function drawMap(){
+        setMidPointAndBounds();
         for (var i =0; i<self.venues().length; i++){
             self.venues()[i].marker().setMap(null);
         }
@@ -277,11 +321,19 @@ function ViewModel() {
         infoWindow.close();
         if(currentVenue()){
             previousVenue(currentVenue());
-            previousVenue().setIcon("");            
+            var image = marker.getIcon();
+            image.url = "http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png";
+            previousVenue().setIcon(image);            
         }
         currentVenue(marker);
-        marker.setIcon("http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-blue.png");
-        marker.getMap().setZoom(14);
+        var image = marker.getIcon();
+        image.url = "http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-blue.png";
+        marker.setIcon(image);
+        var zoomLevel = 14
+        if(mediaState){
+            zoomLevel = 16
+        }
+        marker.getMap().setZoom(zoomLevel);
         marker.getMap().setCenter(marker.position);
     }
 }
