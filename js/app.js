@@ -45,7 +45,7 @@ function venue(rawVenue){
             origin: null,
             anchor: null,
             scaledSize: null,
-        }
+        };
         //if on mobile scree, then use a larger marker
         if(getMediaState()){
             image.scaledSize = new google.maps.Size(88, 160);
@@ -66,7 +66,8 @@ function ViewModel() {
     //helper function to help remove duplicate venues from swarm export
     var checkNewVenue = function (venueId){
         var newVenue = true;
-        for(var i =0; i<self.venues().length; i++){
+        var numOfVenues = self.venues().length;
+        for(var i =0; i<numOfVenues; i++){
             if (self.venues()[i].id()==venueId){
                 newVenue = false;
                 break;
@@ -136,7 +137,7 @@ function ViewModel() {
     window.addEventListener("resize", function() {
         //when viewing this app on a small screen and resizing(changing orientation), forcing a reload creates better google map
         if(getMediaState()){
-            location.reload()
+            location.reload();
         }
         var newCenter = map.getCenter();
         google.maps.event.trigger(map, "resize");
@@ -340,10 +341,10 @@ function ViewModel() {
         //using focused icon image.
         image.url = "http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-blue.png";
         marker.setIcon(image);
-        var zoomLevel = 14
+        var zoomLevel = 14;
         //making zoom responsive.
         if(getMediaState()){
-            zoomLevel = 16
+            zoomLevel = 16;
         }
         marker.getMap().setZoom(zoomLevel);
         marker.getMap().setCenter(marker.position);
